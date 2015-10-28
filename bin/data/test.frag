@@ -9,6 +9,9 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_aspectRatio;
+uniform float u_particle_lifespan;
+
+
 float origin_aR = u_aspectRatio;
 
 mat3 matrix = mat3(vec3(1.,0.,0.),
@@ -108,6 +111,7 @@ float bokeh(vec2 st, vec2 mousePos, float size, float edgeThickness, float brigh
     st.y += mousePos.y;
     float bokSize = 0.04 * size;
     float bokEdge = 0.003 * edgeThickness;
+    blurriness *= size;
     
     //frames
     float bok = 1. - (smoothstep(bokSize, bokSize + 2. * bokEdge + 0.05 * blurriness, triShapeDistance(st, sides)) + smoothstep(bokSize + 0.01 * blurriness, bokSize -  1.0 * bokEdge + 0.01 * blurriness, triShapeDistance(st, sides))) ;
@@ -129,13 +133,13 @@ void main() {
     
     translate(vec2(-mousePos.x,  mousePos.y - 1.0), matrix);
     scale(vec2(u_aspectRatio, 1.0),matrix);
-    rotate(-u_time, matrix);
+    rotate(-u_time * 0.1, matrix);
     pos = matrix * pos;
-    float bok = bokeh(pos.xy, vec2(0.0, 0.0), 1.0, 1.0, 1.0, 6, 1.0);
+    float bok = bokeh(pos.xy, vec2(0.0, 0.0), 1.0 - u_particle_lifespan, 1.0, u_particle_lifespan, 6, u_particle_lifespan);
     
     
     
-    vec3 color = vec3(1.0);
+    vec3 color = vec3(st.x, st.y, st.y);
     
     gl_FragColor = vec4(color, bok);
 }

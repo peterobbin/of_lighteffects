@@ -47,7 +47,7 @@ void Particle::draw(){
     
     
     
-    ofCircle(pos,3*ofMap(lifespan, 0, 255, 0, 1));
+    ofCircle(pos,2.0 * ofMap(lifespan, 0, 255, 0, 1));
 }
 
 

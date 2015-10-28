@@ -31,15 +31,20 @@ void ofApp::draw(){
         systems[i].draw();
         
         //  only do certain amount of particles
-        for (int j = 0; j < systems[i].particleList.size(); j += 25) {
+        for (int j = 0; j < systems[i].particleList.size(); j += 30) {
+            
             
             //  checking life span and normalize it
-            float lifespan = systems[i].particleList[j].lifespan/255;
+            float lifespan = ofClamp(systems[i].particleList[j].lifespan/255, 0.0, 1.0);
+            float lifespan_invert = 1.0 - lifespan;
+            
+    
             shader.begin();
             shader.setUniform2f("u_resolution", ofGetWidth(), ofGetHeight());
             shader.setUniform1f("u_time", ofGetElapsedTimef());
             shader.setUniform2f("u_mouse", systems[i].particleList[j].pos.x , systems[i].particleList[j].pos.y);
             shader.setUniform1f("u_particle_lifespan", lifespan);
+            
             shader.setUniform1f("u_aspectRatio", windowSize.x/windowSize.y);
             ofRect(0, 0, ofGetWidth(), ofGetHeight());
             shader.end();
