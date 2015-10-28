@@ -9,6 +9,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_aspectRatio;
+float origin_aR = u_aspectRatio;
 
 mat3 matrix = mat3(vec3(1.,0.,0.),
                    vec3(0.,1.,0.),
@@ -130,7 +131,7 @@ void main() {
     scale(vec2(u_aspectRatio, 1.0),matrix);
     rotate(-u_time, matrix);
     pos = matrix * pos;
-    float bok = bokeh(pos.xy, vec2(0.0, 0.0), 1.0, 1.0, 1.0, 6, abs(sin(u_time)));
+    float bok = bokeh(pos.xy, vec2(0.0, 0.0), 1.0, 1.0, 1.0, 6, 1.0);
     
     
     

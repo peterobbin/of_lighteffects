@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "particleSystem.hpp"
 
 class ofApp : public ofBaseApp{
 
@@ -20,9 +21,14 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
     
-    ofShader shader;
+    
     ofVec2f windowSize;
     ofVec2f circlePos;
+    ofShader shader;
+    
+    
+    vector<ParticleSystem> systems;
+    ofVec2f gravity;
     
 
 };
