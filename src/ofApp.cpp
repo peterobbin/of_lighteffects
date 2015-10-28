@@ -10,6 +10,7 @@ void ofApp::setup(){
     stripes.load("flareStripes.vert", "flareStripes.frag");
     shaderBlurX.load("blurx.vert","blurx.frag");
     shaderBlurY.load("blury.vert","blury.frag");
+    bloom.load("bloom.vert","bloom.frag");
     
     
     timestamp = ofGetElapsedTimef();
@@ -17,7 +18,7 @@ void ofApp::setup(){
     
     
     
-    bluramt = 2.0;
+    bluramt = 0.0;
     
 }
 
@@ -45,7 +46,7 @@ void ofApp::draw(){
     ofBackground(0);
     
     
-   
+    
     
     
     
@@ -53,17 +54,24 @@ void ofApp::draw(){
         flareStripes();
         bokeh();
         flareBar();
+        blooms();
         blur(bluramt);
     }
-    
-    
-    
-    
-    
     
     // pinpoint mouse location
     ofCircle(mouseX, mouseY, 1.0);
     
+}
+
+//-------------------------------------------
+void ofApp::blooms(){
+    bloom.begin();
+    bloom.setUniform2f("u_resolution", ofGetWidth(), ofGetHeight());
+    bloom.setUniform1f("u_time", ofGetElapsedTimef());
+    bloom.setUniform2f("u_mouse", systemLocation.x , systemLocation.y);
+    bloom.setUniform1f("u_timer", timer);
+    ofRect(0, 0, ofGetWidth(), ofGetHeight());
+    bloom.end();
 }
 
 //-------------------------------------------
@@ -73,30 +81,26 @@ void ofApp::blur(float bluramt){
     fboBlurTwoPass.allocate(image.getWidth(), image.getHeight());
     
     
+    
     float blur = bluramt;
     
+    // modified from oF blur tutorial
+    // horizonal pass
     //----------------------------------------------------------
     fboBlurOnePass.begin();
-    
     shaderBlurX.begin();
     shaderBlurX.setUniform1f("blurAmnt", blur);
-    
     image.draw(0, 0);
-    
     shaderBlurX.end();
-    
     fboBlurOnePass.end();
     
+    // vertical pass
     //----------------------------------------------------------
     fboBlurTwoPass.begin();
-    
     shaderBlurY.begin();
     shaderBlurY.setUniform1f("blurAmnt", blur);
-    
     fboBlurOnePass.draw(0, 0);
-    
     shaderBlurY.end();
-    
     fboBlurTwoPass.end();
     
     //----------------------------------------------------------
@@ -105,6 +109,8 @@ void ofApp::blur(float bluramt){
 
 
 }
+
+
 
 //-------------------------------------------
 void ofApp::flareStripes(){
@@ -124,7 +130,7 @@ void ofApp::bokeh(){
     for (int i = 0; i < systems.size(); i++) {
         systems[i].draw();
         //  only do certain amount of particles
-        for (int j = 0; j < systems[i].particleList.size(); j += 40) {
+        for (int j = 0; j < systems[i].particleList.size(); j += 60) {
             
             //  checking life span and normalize it
             float lifespan = ofClamp(systems[i].particleList[j].lifespan/255, 0.0, 1.0);
@@ -151,7 +157,7 @@ void ofApp::flareBar(){
         systems[i].draw();
         
         //  only do certain amount of particles
-        for (int j = 0; j < systems[i].particleList.size(); j += 200) {
+        for (int j = 0; j < systems[i].particleList.size(); j += 230) {
             
             //  checking life span and normalize it
             float lifespan = ofClamp(systems[i].particleList[j].lifespan/255, 0.0, 1.0);

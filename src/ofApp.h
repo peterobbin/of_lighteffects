@@ -24,6 +24,8 @@ class ofApp : public ofBaseApp{
     void flareBar();
     void flareStripes();
     void blur(float bluramt);
+    void blooms();
+    
     
     
     
@@ -33,6 +35,13 @@ class ofApp : public ofBaseApp{
     ofShader shader;
     ofShader flare;
     ofShader stripes;
+    ofShader bloom;
+    
+    ofImage image;
+    ofFbo fboBlurOnePass;
+    ofShader shaderBlurX;
+    ofFbo fboBlurTwoPass;
+    ofShader shaderBlurY;
     
     
     vector<ParticleSystem> systems;
@@ -46,11 +55,7 @@ class ofApp : public ofBaseApp{
     float bluramt;
     
     
-    ofImage image;
-    ofFbo fboBlurOnePass;
-    ofShader shaderBlurX;
-    ofFbo fboBlurTwoPass;
-    ofShader shaderBlurY;
+    
     
 
 };
