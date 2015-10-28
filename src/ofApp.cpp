@@ -14,6 +14,7 @@ void ofApp::setup(){
     
     timestamp = ofGetElapsedTimef();
     enableEffects = false;
+    ofHideCursor();
    
     
     bluramt = 0.0;
@@ -26,6 +27,14 @@ void ofApp::setup(){
     flareStripeSize = 1.0;
     bokehSides = 6;
     bokehSize = 1.0;
+    
+    
+    gui.setup("shader effects");
+    gui.add(showBokeh.set("show Bokeh",true));
+    gui.add(showFlareBar.set("show FlareBar",true));
+    gui.add(showFlareStripes.set("show FlareStripes",true));
+    gui.add(enableBlooms.set("enable Blooms",true));
+    gui.add(enableBlur.set("enable Blur",true));
     
     
 }
@@ -51,15 +60,18 @@ void ofApp::draw(){
     ofBackground(0);
     
     if (enableEffects){
-        flareStripes();
-        bokeh();
-        flareBar();
-        blooms();
-        blur(bluramt);
+        if (showBokeh) bokeh();;
+        if (showFlareBar) flareBar();
+        if (showFlareStripes) flareStripes();
+        if (enableBlooms) blooms();
+        if (enableBlur) blur(bluramt);
     }
+    
+    gui.draw();
     
     // pinpoint mouse location
     ofCircle(mouseX, mouseY, 1.0);
+    
     
 }
 
@@ -200,7 +212,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+    ofShowCursor();
 }
 
 //--------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "particleSystem.hpp"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -62,5 +63,14 @@ class ofApp : public ofBaseApp{
     float flareStripeSize;
     int bokehSides;
     float bokehSize;
+    
+    
+    ofxPanel gui;
+    ofParameter<bool> showBokeh;
+    ofParameter<bool> showFlareBar;
+    ofParameter<bool> showFlareStripes;
+    ofParameter<bool> enableBlooms;
+    ofParameter<bool> enableBlur;
+    
 
 };
