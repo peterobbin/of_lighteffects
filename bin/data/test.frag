@@ -23,14 +23,43 @@ float F2(float x){
     return 1.0 - pow(max(0.0, abs(x) * 2.0 - 0.3), 0.5) * 1.0;
 }
 
+mat3 scaleMatrix(vec2 f) {
+    return mat3(vec3(f.x,0.0,0.0),
+                vec3(0.0,f.y,0.0),
+                vec3(0.0,0.0,1.0));
+}
+
+void scale(in vec2 f, inout mat3 mtx) {
+    mtx = scaleMatrix(f) * mtx;
+}
+
+mat3 translationMatrix(vec2 f) {
+    return mat3(vec3(1.0,0.0,0.0),
+                vec3(0.0,1.0,0.0),
+                vec3(f.x,f.y,1.0));
+}
+
+void translate(vec2 f, inout mat3 mtx) {
+    mtx = translationMatrix(f) * mtx;
+}
+
+mat3 rotationMatrix(float a) {
+    return mat3(vec3(cos(a),-sin(a),0.0),
+                vec3(sin(a),cos(a),0.0),
+                vec3(0.0,0.0,1.0));
+}
+
+void rotate(float a, inout mat3 mtx) {
+    mtx = rotationMatrix(a) * mtx;
+}
 // Reference to
 // http://thndl.com/square-shaped-shaders.html
 
 float triShapeDistance(vec2 st, int sides){
     // Remap the space to -1. to 1.
-    st.x = st.x * u_aspectRatio;
+    st.x = st.x  ;
 
-    st.y -= 1.0;
+    st.y -= 0.0 ;
     
 
     //    st.x = st.x * 2.- u_aspectRatio;
@@ -74,7 +103,7 @@ vec3 rgbNormalizer(vec3 color){
 
 float bokeh(vec2 st, vec2 mousePos, float size, float edgeThickness, float brightness, int sides, float blurriness){
     
-    st.x -= mousePos.x;
+    st.x += mousePos.x;
     st.y += mousePos.y;
     float bokSize = 0.04 * size;
     float bokEdge = 0.003 * edgeThickness;
@@ -94,16 +123,18 @@ float bokeh(vec2 st, vec2 mousePos, float size, float edgeThickness, float brigh
 void main() {
     
     vec2 st = gl_FragCoord.xy/u_resolution;
+    vec3 pos = vec3(st + vec2(0.0, -0.0),1.0);
     vec2 mousePos = u_mouse/u_resolution;
-    //
-    //st.y = st.y * u_aspectRatio;
-    //aspectRatioFix(st, mousePos);
     
-    float bok = bokeh(st, mousePos, 1.0, 1.0, 1.0, 6, abs(sin(u_time)));
+    translate(vec2(-mousePos.x,  mousePos.y - 1.0), matrix);
+    scale(vec2(u_aspectRatio, 1.0),matrix);
+    rotate(-u_time, matrix);
+    pos = matrix * pos;
+    float bok = bokeh(pos.xy, vec2(0.0, 0.0), 1.0, 1.0, 1.0, 6, abs(sin(u_time)));
     
     
     
-    vec3 color = vec3(st.x, st.y, st.y);
+    vec3 color = vec3(1.0);
     
     gl_FragColor = vec4(color, bok);
 }
