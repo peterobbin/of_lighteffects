@@ -105,6 +105,8 @@ vec3 rgbNormalizer(vec3 color){
     
 }
 
+
+
 float bokeh(vec2 st, vec2 mousePos, float size, float edgeThickness, float brightness, int sides, float blurriness){
     
     st.x += mousePos.x;

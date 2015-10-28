@@ -20,11 +20,15 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
+    void bokeh();
+    void flareBar();
+    
     
     
     ofVec2f windowSize;
     ofVec2f circlePos;
     ofShader shader;
+    ofShader flare;
     
     
     vector<ParticleSystem> systems;
