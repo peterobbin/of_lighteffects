@@ -16,17 +16,17 @@ void ofApp::setup(){
     enableEffects = false;
     ofHideCursor();
    
-    
-    bluramt = 0.0;
-    bloomsize = 1.0;
-    bloombrightness = 0.5;
-    flareBarRange = 1.0;
-    flareBarThickness = 1.0;
-    flareStripeBlur = 1.0;
-    flareStripeBrightness = 1.5;
-    flareStripeSize = 1.0;
-    bokehSides = 6;
-    bokehSize = 1.0;
+//    
+//    bluramt = 0.0;
+//    bloomsize = 1.0;
+//    bloombrightness = 0.5;
+//    flareBarRange = 1.0;
+//    flareBarThickness = 1.0;
+//    flareStripeBlur = 1.0;
+//    flareStripeBrightness = 1.5;
+//    flareStripeSize = 1.0;
+//    bokehSides = 6;
+//    bokehSize = 1.0;
     
     
     gui.setup("shader effects");
@@ -35,6 +35,20 @@ void ofApp::setup(){
     gui.add(showFlareStripes.set("show FlareStripes",true));
     gui.add(enableBlooms.set("enable Blooms",true));
     gui.add(enableBlur.set("enable Blur",true));
+    
+    
+    gui.add(bokehSides.set("bokeh sides", 6, 5, 10));
+    gui.add(bokehSize.set("bokeh size", 1.0, 0.0, 2.0));
+    gui.add(flareBarRange.set("flare bar range", 1.0, 0.0, 2.0));
+    gui.add(flareBarThickness.set("flare bar thickness", 1.0, 0.0, 2.0));
+    gui.add(flareStripeBlur.set("flare stripe blur", 1.0, 0.0, 2.0));
+    gui.add(flareStripeBrightness.set("flare stripe brightness", 1.5, 0.0, 2.0));
+    gui.add(flareStripeSize.set("flare stripe size", 1.0, 0.0, 2.0));
+    gui.add(bloomsize.set("bloom size", 1.0, 0.0, 1.0));
+    gui.add(bloombrightness.set("bloom brightness", 0.5, 0.0, 2.0));
+    gui.add(bluramt.set("blur amount", 0.0, 0.0, 2.0));
+    
+    
     
     
 }

@@ -53,16 +53,16 @@ class ofApp : public ofBaseApp{
     float timer;
     bool enableEffects;
     
-    float bluramt;
-    float bloomsize;
-    float bloombrightness;
-    float flareBarRange;
-    float flareBarThickness;
-    float flareStripeBlur;
-    float flareStripeBrightness;
-    float flareStripeSize;
-    int bokehSides;
-    float bokehSize;
+    ofParameter<float> bluramt;
+    ofParameter<float> bloomsize;
+    ofParameter<float> bloombrightness;
+    ofParameter<float> flareBarRange;
+    ofParameter<float> flareBarThickness;
+    ofParameter<float> flareStripeBlur;
+    ofParameter<float> flareStripeBrightness;
+    ofParameter<float> flareStripeSize;
+    ofParameter<int> bokehSides;
+    ofParameter<float> bokehSize;
     
     
     ofxPanel gui;
@@ -71,6 +71,8 @@ class ofApp : public ofBaseApp{
     ofParameter<bool> showFlareStripes;
     ofParameter<bool> enableBlooms;
     ofParameter<bool> enableBlur;
+    
+    
     
 
 };
