@@ -22,6 +22,8 @@ class ofApp : public ofBaseApp{
     
     void bokeh();
     void flareBar();
+    void flareStripes();
+    
     
     
     
@@ -29,10 +31,16 @@ class ofApp : public ofBaseApp{
     ofVec2f circlePos;
     ofShader shader;
     ofShader flare;
+    ofShader stripes;
     
     
     vector<ParticleSystem> systems;
     ofVec2f gravity;
+    ofVec2f systemLocation;
+    
+    float timestamp;
+    float timer;
+    bool enableEffects;
     
 
 };
