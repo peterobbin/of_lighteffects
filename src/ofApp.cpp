@@ -12,11 +12,9 @@ void ofApp::setup(){
     shaderBlurY.load("blury.vert","blury.frag");
     bloom.load("bloom.vert","bloom.frag");
     
-    
     timestamp = ofGetElapsedTimef();
     enableEffects = false;
-    
-    
+   
     
     bluramt = 0.0;
     
@@ -35,20 +33,12 @@ void ofApp::update(){
     timer = ofGetElapsedTimef() - timestamp;
     timer = 1.0 - ofClamp(timer, 0.0, 3.0) / 3.0;
     
-    
-    
-    
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofSetColor(255);
     ofBackground(0);
-    
-    
-    
-    
-    
     
     if (enableEffects){
         flareStripes();
