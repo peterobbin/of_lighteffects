@@ -10,28 +10,29 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     windowSize = ofVec2f(ofGetWidth(), ofGetHeight());
-//    float b = ofGetHeight();
-//    float c = a / b;
-    cout<<windowSize.x/windowSize.y<<endl;
     circlePos = ofVec2f(sin(ofGetElapsedTimef()) * 50 + ofGetWidth()/2, cos(ofGetElapsedTimef()) * 50 + ofGetHeight()/2);
+
+    
+    //cout<< windowSize.x/windowSize.y<<endl;
     
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofSetColor(255);
-    ofCircle(circlePos, 100);
-    for (int i = 1 ; i <= 10 ; i ++){
+    ofBackground(0);
+    ofCircle(circlePos, 10);
+    ofCircle(mouseX, mouseY, 1.0);
     shader.begin();
    
     shader.setUniform2f("u_resolution", ofGetWidth(), ofGetHeight());
     shader.setUniform1f("u_time", ofGetElapsedTimef());
-    shader.setUniform2f("u_mouse", circlePos.x * i, ofGetHeight() - circlePos.y * i);
+    shader.setUniform2f("u_mouse", mouseX , mouseY);
     shader.setUniform1f("u_aspectRatio", windowSize.x/windowSize.y);
-    
+
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
     shader.end();
-    }
+    
 }
 
 //--------------------------------------------------------------

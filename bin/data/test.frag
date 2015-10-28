@@ -3,11 +3,16 @@ precision mediump float;
 #endif
 
 #define PI 3.14159265359
+#define TWO_PI 6.28318530718
 
 uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_aspectRatio;
+
+mat3 matrix = mat3(vec3(1.,0.,0.),
+                   vec3(0.,1.,0.),
+                   vec3(0.,0.,1.));
 
 
 float F1(float x){
@@ -18,19 +23,87 @@ float F2(float x){
     return 1.0 - pow(max(0.0, abs(x) * 2.0 - 0.3), 0.5) * 1.0;
 }
 
+// Reference to
+// http://thndl.com/square-shaped-shaders.html
+
+float triShapeDistance(vec2 st, int sides){
+    // Remap the space to -1. to 1.
+    st.x = st.x * u_aspectRatio;
+
+    st.y -= 1.0;
+    
+
+    //    st.x = st.x * 2.- u_aspectRatio;
+    //    st.y = st.y * 2. - 1.0;
+    
+    //st.x = st.x * 2. - u_aspectRatio;
+    
+    // Number of sides of your shape
+    int N = sides;
+    
+    // Angle and radius from the current pixel
+    float a = atan(st.x,st.y)+PI;
+    float r = TWO_PI/float(N);
+    
+    // Shaping function that modulate the distance
+    float d = cos(floor(.5+a/r)*r-a)*length(st);
+    
+    return d;
+    
+}
+
+// @appas  noise function from stackoverflow.xom
+float snoise(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+ void aspectRatioFix(vec2 st, vec2 mousePos){
+     st.x = st.x * u_aspectRatio;
+     st.y = st.y / u_aspectRatio;
+     mousePos.x = mousePos.x * u_aspectRatio;
+     mousePos.y = mousePos.y / u_aspectRatio;
+ }
+
+vec3 rgbNormalizer(vec3 color){
+    float r = color.r;
+    float g = color.g;
+    float b = color.b;
+    return vec3((r + 1.0)/256.0 , (g + 1.0)/256.0 , (b + 1.0)/256.0 );
+    
+}
+
+float bokeh(vec2 st, vec2 mousePos, float size, float edgeThickness, float brightness, int sides, float blurriness){
+    
+    st.x -= mousePos.x;
+    st.y += mousePos.y;
+    float bokSize = 0.04 * size;
+    float bokEdge = 0.003 * edgeThickness;
+    
+    //frames
+    float bok = 1. - (smoothstep(bokSize, bokSize + 2. * bokEdge + 0.05 * blurriness, triShapeDistance(st, sides)) + smoothstep(bokSize + 0.01 * blurriness, bokSize -  1.0 * bokEdge + 0.01 * blurriness, triShapeDistance(st, sides))) ;
+    bok*= 1. - clamp(blurriness * 5., 0.0, 1.0);
+    
+    //shape
+    bok += 1. - smoothstep(bokSize - bokEdge + 0.01 * blurriness, bokSize + 0.05 * blurriness, triShapeDistance(st, sides));
+    float bokBrightness = 0.9 * brightness;
+    bok*= bokBrightness;
+    
+    return bok;
+}
+
 void main() {
     
     vec2 st = gl_FragCoord.xy/u_resolution;
-    st.x = st.x * u_aspectRatio;
-    
-    st.y = st.y / u_aspectRatio;
     vec2 mousePos = u_mouse/u_resolution;
-    mousePos.x = mousePos.x * u_aspectRatio;
-    mousePos.y = mousePos.y / u_aspectRatio;
-    float pct = F1(st.x - mousePos.x);
-    pct *= F2(st.y - mousePos.y);
+    //
+    //st.y = st.y * u_aspectRatio;
+    //aspectRatioFix(st, mousePos);
     
-    vec3 color = vec3(pct* 1.0);
+    float bok = bokeh(st, mousePos, 1.0, 1.0, 1.0, 6, abs(sin(u_time)));
     
-    gl_FragColor = vec4(pct);
+    
+    
+    vec3 color = vec3(st.x, st.y, st.y);
+    
+    gl_FragColor = vec4(color, bok);
 }
