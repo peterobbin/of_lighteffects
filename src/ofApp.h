@@ -53,9 +53,14 @@ class ofApp : public ofBaseApp{
     bool enableEffects;
     
     float bluramt;
-    
-    
-    
-    
+    float bloomsize;
+    float bloombrightness;
+    float flareBarRange;
+    float flareBarThickness;
+    float flareStripeBlur;
+    float flareStripeBrightness;
+    float flareStripeSize;
+    int bokehSides;
+    float bokehSize;
 
 };

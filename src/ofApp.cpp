@@ -5,7 +5,7 @@ void ofApp::setup(){
 
     
     gravity.set(0.0, 0.02);
-    shader.load("test.vert", "test.frag");
+    shader.load("bokeh.vert", "bokeh.frag");
     flare.load("flare.vert", "flare.frag");
     stripes.load("flareStripes.vert", "flareStripes.frag");
     shaderBlurX.load("blurx.vert","blurx.frag");
@@ -17,6 +17,16 @@ void ofApp::setup(){
    
     
     bluramt = 0.0;
+    bloomsize = 1.0;
+    bloombrightness = 0.5;
+    flareBarRange = 1.0;
+    flareBarThickness = 1.0;
+    flareStripeBlur = 1.0;
+    flareStripeBrightness = 1.5;
+    flareStripeSize = 1.0;
+    bokehSides = 6;
+    bokehSize = 1.0;
+    
     
 }
 
@@ -60,6 +70,10 @@ void ofApp::blooms(){
     bloom.setUniform1f("u_time", ofGetElapsedTimef());
     bloom.setUniform2f("u_mouse", systemLocation.x , systemLocation.y);
     bloom.setUniform1f("u_timer", timer);
+    bloom.setUniform1f("u_size", bloomsize);
+    bloom.setUniform1f("u_brightness", bloombrightness);
+    
+    
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
     bloom.end();
 }
@@ -109,6 +123,12 @@ void ofApp::flareStripes(){
     stripes.setUniform1f("u_time", ofGetElapsedTimef());
     stripes.setUniform2f("u_mouse", systemLocation.x ,systemLocation.y);
     stripes.setUniform1f("u_timer", timer);
+    stripes.setUniform1f("u_blur", flareStripeBlur);
+    stripes.setUniform1f("u_brightness", flareStripeBrightness);
+    stripes.setUniform1f("u_size", flareStripeSize);
+   
+    
+    
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
     stripes.end();
 
@@ -130,8 +150,9 @@ void ofApp::bokeh(){
             shader.setUniform1f("u_time", ofGetElapsedTimef());
             shader.setUniform2f("u_mouse", systems[i].particleList[j].pos.x , systems[i].particleList[j].pos.y);
             shader.setUniform1f("u_particle_lifespan", lifespan);
-            
             shader.setUniform1f("u_aspectRatio", windowSize.x/windowSize.y);
+            shader.setUniform1i("u_sides", bokehSides);
+            shader.setUniform1f("u_size", bokehSize);
             ofRect(0, 0, ofGetWidth(), ofGetHeight());
             shader.end();
             
@@ -157,6 +178,8 @@ void ofApp::flareBar(){
             flare.setUniform2f("u_mouse", systems[i].particleList[j].pos.x , systems[i].particleList[j].pos.y);
             flare.setUniform1f("u_particle_lifespan", lifespan);
             flare.setUniform1f("u_aspectRatio", windowSize.x/windowSize.y);
+            flare.setUniform1f("u_range", flareBarRange);
+            flare.setUniform1f("u_thickness", flareBarThickness);
             ofRect(0, 0, ofGetWidth(), ofGetHeight());
             flare.end();
             

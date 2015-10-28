@@ -10,7 +10,8 @@ uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_aspectRatio;
 uniform float u_particle_lifespan;
-
+uniform int u_sides;
+uniform float u_size;
 
 float origin_aR = u_aspectRatio;
 
@@ -134,10 +135,10 @@ void main() {
     vec2 mousePos = u_mouse/u_resolution;
     
     translate(vec2(-mousePos.x,  mousePos.y - 1.0), matrix);
-    scale(vec2(u_aspectRatio, 1.0),matrix);
+    scale(vec2(u_aspectRatio * u_size, 1.0 * u_size),matrix);
     rotate(-u_time * 0.1, matrix);
     pos = matrix * pos;
-    float bok = bokeh(pos.xy, vec2(0.0, 0.0), 1.0 - u_particle_lifespan, 1.0, u_particle_lifespan, 6, u_particle_lifespan);
+    float bok = bokeh(pos.xy, vec2(0.0, 0.0), 1.0 - u_particle_lifespan, 1.0, u_particle_lifespan, u_sides, u_particle_lifespan);
     
     
     

@@ -10,6 +10,9 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_timer;
+uniform float u_blur;
+uniform float u_brightness;
+uniform float u_size;
 
 mat3 matrix = mat3(vec3(1.,0.,0.),
                    vec3(0.,1.,0.),
@@ -117,20 +120,20 @@ void main(){
     pos = matrix * pos;
     
     
-    color += bars(pos.xy,0.4, 0.5) * 0.3 * u_timer;
+    color += bars(pos.xy,0.4 * u_size, 0.5 * u_blur) * 0.3 * u_timer * u_brightness ;
     translate(vec2(0.5,0.5), matrix);
     pos = matrix * pos;
     
     
-    color += bars2(pos.xy, 0.4, 0.4) * 0.4 * u_timer;
+    color += bars2(pos.xy, 0.4 * u_size, 0.4 * u_blur) * 0.4 * u_timer * u_brightness ;
     translate(vec2(-0.2,-0.2), matrix);
     pos = matrix * pos;
     
-    color += barsFlare(pos.xy + vec2(0.0, 0.05), 0.4, 1.2, 1.0) * 0.1 * u_timer;
+    color += barsFlare(pos.xy + vec2(0.0, 0.05), 0.4 * u_size, 1.2 * u_blur, 1.0) * 0.1 * u_timer * u_brightness ;
     translate(vec2(0.2,0.2), matrix);
     pos = matrix * pos;
     
-    color += barsFlare(pos.xy + vec2(0.0, -0.05), 0.3, 1.2, 0.4) * 0.9 * u_timer;
+    color += barsFlare(pos.xy + vec2(0.0, -0.05), 0.3 * u_size, 1.2 * u_blur, 0.4) * 0.9 * u_timer * u_brightness ;
     
     
     gl_FragColor = vec4( st.x, st.y, st.x ,color.x);
