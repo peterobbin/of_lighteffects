@@ -23,6 +23,7 @@ class ofApp : public ofBaseApp{
     void bokeh();
     void flareBar();
     void flareStripes();
+    void blur(float bluramt);
     
     
     
@@ -41,6 +42,15 @@ class ofApp : public ofBaseApp{
     float timestamp;
     float timer;
     bool enableEffects;
+    
+    float bluramt;
+    
+    
+    ofImage image;
+    ofFbo fboBlurOnePass;
+    ofShader shaderBlurX;
+    ofFbo fboBlurTwoPass;
+    ofShader shaderBlurY;
     
 
 };

@@ -8,8 +8,16 @@ void ofApp::setup(){
     shader.load("test.vert", "test.frag");
     flare.load("flare.vert", "flare.frag");
     stripes.load("flareStripes.vert", "flareStripes.frag");
+    shaderBlurX.load("blurx.vert","blurx.frag");
+    shaderBlurY.load("blury.vert","blury.frag");
+    
+    
     timestamp = ofGetElapsedTimef();
     enableEffects = false;
+    
+    
+    
+    bluramt = 2.0;
     
 }
 
@@ -25,23 +33,79 @@ void ofApp::update(){
     // normalized timer vlue
     timer = ofGetElapsedTimef() - timestamp;
     timer = 1.0 - ofClamp(timer, 0.0, 3.0) / 3.0;
+    
+    
+    
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofSetColor(255);
     ofBackground(0);
-    // pinpoint mouse location
-    ofCircle(mouseX, mouseY, 1.0);
+    
+    
+   
+    
+    
     
     if (enableEffects){
         flareStripes();
         bokeh();
         flareBar();
+        blur(bluramt);
     }
- 
+    
+    
+    
+    
+    
+    
+    // pinpoint mouse location
+    ofCircle(mouseX, mouseY, 1.0);
     
 }
+
+//-------------------------------------------
+void ofApp::blur(float bluramt){
+    image.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+    fboBlurOnePass.allocate(image.getWidth(), image.getHeight());
+    fboBlurTwoPass.allocate(image.getWidth(), image.getHeight());
+    
+    
+    float blur = bluramt;
+    
+    //----------------------------------------------------------
+    fboBlurOnePass.begin();
+    
+    shaderBlurX.begin();
+    shaderBlurX.setUniform1f("blurAmnt", blur);
+    
+    image.draw(0, 0);
+    
+    shaderBlurX.end();
+    
+    fboBlurOnePass.end();
+    
+    //----------------------------------------------------------
+    fboBlurTwoPass.begin();
+    
+    shaderBlurY.begin();
+    shaderBlurY.setUniform1f("blurAmnt", blur);
+    
+    fboBlurOnePass.draw(0, 0);
+    
+    shaderBlurY.end();
+    
+    fboBlurTwoPass.end();
+    
+    //----------------------------------------------------------
+    ofSetColor(ofColor::white);
+    fboBlurTwoPass.draw(0, 0);
+
+
+}
+
 //-------------------------------------------
 void ofApp::flareStripes(){
     stripes.begin();
