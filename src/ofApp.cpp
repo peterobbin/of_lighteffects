@@ -73,10 +73,12 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+    ofSetColor( 0 );
+    ofDrawRectangle(0, 0, ofGetScreenWidth(), ofGetScreenHeight());
 	ofSetColor( 255 );
 	ofBackground( 0 );
 	ofEnableBlendMode( OF_BLENDMODE_ADD );
-
+    
 	if( enableEffects ) {
 		if( showBokeh ) { bokeh(); };
 
@@ -92,7 +94,7 @@ void ofApp::draw()
 	gui.draw();
 
 	// pinpoint mouse location
-	ofCircle( mouseX, mouseY, 1.0 );
+	ofDrawCircle( mouseX, mouseY, 1.0 );
 
 
 }
@@ -109,7 +111,7 @@ void ofApp::blooms()
 	bloom.setUniform1f( "u_brightness", bloombrightness );
 
 
-	ofRect( 0, 0, ofGetWidth(), ofGetHeight() );
+	ofDrawRectangle( 0, 0, ofGetWidth(), ofGetHeight() );
 	bloom.end();
 }
 
@@ -144,7 +146,7 @@ void ofApp::blur( float bluramt )
 	fboBlurTwoPass.end();
 
 	//----------------------------------------------------------
-	ofSetColor( ofColor::white );
+    ofSetColor( ofColor(0) );
 	fboBlurTwoPass.draw( 0, 0 );
 
 
@@ -166,7 +168,7 @@ void ofApp::flareStripes()
 
 
 
-	ofRect( 0, 0, ofGetWidth(), ofGetHeight() );
+	ofDrawRectangle( 0, 0, ofGetWidth(), ofGetHeight() );
 	stripes.end();
 
 }
@@ -192,7 +194,7 @@ void ofApp::bokeh()
 			shader.setUniform1f( "u_aspectRatio", windowSize.x / windowSize.y );
 			shader.setUniform1i( "u_sides", bokehSides );
 			shader.setUniform1f( "u_size", bokehSize );
-			ofRect( 0, 0, ofGetWidth(), ofGetHeight() );
+			ofDrawRectangle( 0, 0, ofGetWidth(), ofGetHeight() );
 			shader.end();
 
 		}
@@ -220,7 +222,7 @@ void ofApp::flareBar()
 			flare.setUniform1f( "u_aspectRatio", windowSize.x / windowSize.y );
 			flare.setUniform1f( "u_range", flareBarRange );
 			flare.setUniform1f( "u_thickness", flareBarThickness );
-			ofRect( 0, 0, ofGetWidth(), ofGetHeight() );
+			ofDrawRectangle( 0, 0, ofGetWidth(), ofGetHeight() );
 			flare.end();
 
 		}
